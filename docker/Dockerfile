@@ -4,10 +4,12 @@ ARG TARGETPLATFORM
 COPY ./setup.sh /setup.sh
 RUN /setup.sh
 
-FROM node:18.20.3-alpine3.20
+FROM node:18.16.0-bullseye
 COPY --from=0 /boilerplate.zip /boilerplate.zip
 COPY ./entrypoint.sh /
 RUN apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-freefont font-noto-cjk
+RUN apk add --no-cache build-base g++ cairo-dev pango-dev giflib-dev librsvg-dev
+
 VOLUME ["/koishi"]
 WORKDIR "/koishi"
 ENTRYPOINT ["/entrypoint.sh"]
