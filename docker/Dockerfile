@@ -10,8 +10,8 @@ COPY ./entrypoint.sh /
 # RUN apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-freefont font-noto-cjk
 # RUN apk add --no-cache build-base g++ cairo-dev pango-dev giflib-dev librsvg-dev
 RUN apt-get update
-RUN apt-get install chromium libnss3 	libfreetype-dev libharfbuzz-dev ca-certificates fonts-freefont-ttf fonts-noto-cjk
-RUN apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+RUN apt-get install chromium libnss3 	libfreetype-dev libharfbuzz-dev ca-certificates fonts-freefont-ttf fonts-noto-cjk -y
+RUN apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev -y
 VOLUME ["/koishi"]
 WORKDIR "/koishi"
 ENTRYPOINT ["/entrypoint.sh"]
