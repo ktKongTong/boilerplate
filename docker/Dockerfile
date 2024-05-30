@@ -4,7 +4,7 @@ ARG TARGETPLATFORM
 COPY ./setup.sh /setup.sh
 RUN /setup.sh
 
-FROM node:lts-alpine
+FROM node:18.20.3-alpine3.20
 COPY --from=0 /boilerplate.zip /boilerplate.zip
 COPY ./entrypoint.sh /
 RUN apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-freefont font-noto-cjk
