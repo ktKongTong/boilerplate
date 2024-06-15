@@ -27,15 +27,15 @@ jobs:
           DOCKER_REPO: aktdocker/koishi
           GITHUB_REPO: koishijs/boilerplate
         run: |
-          KOISHITAG=$(curl "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r '.tag_name')
-          TAG=$( [ -z "${{ github.event.inputs.tag }}" ] && echo "$KOISHITAG" || echo "${{ github.event.inputs.tag }}" )
+          TAG=$(curl "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r '.tag_name')
+          CUSTAG=$( [ -z "${{ github.event.inputs.tag }}" ] && echo "$TAG" || echo "${{ github.event.inputs.tag }}" )
           NAME=$(cat package.json | jq -r '.name' | sed -E 's/.+\///')
           LINK="https://github.com/${GITHUB_REPO}/releases/download/$TAG/$NAME-$TAG-linux-"
           docker buildx build \
             --build-arg LINK=$LINK \
             --output "type=image,push=true" \
             --platform linux/amd64,linux/arm64 \
-            --tag ${DOCKER_REPO}:$TAG \
+            --tag ${DOCKER_REPO}:$CUSTAG \
             --tag ${DOCKER_REPO}:latest \
             --file ./docker/Dockerfile \
             ./docker
@@ -43,7 +43,7 @@ jobs:
           #   --build-arg LINK=$LINK \
           #   --output "type=image,push=true" \
           #   --platform linux/amd64,linux/arm64 \
-          #   --tag ${DOCKER_REPO}:$TAG-lite \
+          #   --tag ${DOCKER_REPO}:$CUSTAG-lite \
           #   --tag ${DOCKER_REPO}:latest-lite \
           #   --file ./docker/Dockerfile.lite \
           #   ./docker
