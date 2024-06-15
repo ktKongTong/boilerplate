@@ -2,7 +2,10 @@ name: Docker
 
 on:
   workflow_dispatch:
-
+    inputs:
+      tag:
+        required: false
+        type: string
 jobs:
   publish-dockerhub:
     runs-on: ubuntu-latest
@@ -24,7 +27,8 @@ jobs:
           DOCKER_REPO: aktdocker/koishi
           GITHUB_REPO: koishijs/boilerplate
         run: |
-          TAG=$(curl "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r '.tag_name')
+          KOISHITAG=$(curl "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | jq -r '.tag_name')
+          TAG=$( [ -z "${{ github.event.inputs.tag }}" ] && "$KOISHITAG" || echo "${{ github.event.inputs.tag }}" )
           NAME=$(cat package.json | jq -r '.name' | sed -E 's/.+\///')
           LINK="https://github.com/${GITHUB_REPO}/releases/download/$TAG/$NAME-$TAG-linux-"
           docker buildx build \
